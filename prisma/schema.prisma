@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Participant {
+  id              String      @id @default(uuid())
+  name            String
+  email           String      @unique
+  phone           String?
+  college         String?
+  code            String      @unique
+  qrCode          String
+  createdAt       DateTime    @default(now())
+  rounds          ParticipantRound[]
+}
+
+model Round {
+  id              String      @id @default(uuid())
+  name            String
+  status          String      @default("pending")
+  createdAt       DateTime    @default(now())
+  participants    ParticipantRound[]
+}
+
+model ParticipantRound {
+  id              String      @id @default(uuid())
+  participantId   String
+  roundId         String
+  status          String      @default("registered")
+  createdAt       DateTime    @default(now())
+
+  participant     Participant @relation(fields: [participantId], references: [id])
+  round           Round       @relation(fields: [roundId], references: [id])
+
+  @@unique([participantId, roundId])
+}

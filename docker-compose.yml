@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: brain-battle-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: brain_battle
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - brain-battle-network
+
+  app:
+    build: .
+    container_name: brain-battle-app
+    restart: always
+    ports:
+      - "4000:4000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/brain_battle?schema=public
+      - PORT=4000
+      - JWT_SECRET=brain-battle-jwt-secret-key
+      - ADMIN_PASSWORD=brainbattle2025
+    depends_on:
+      - postgres
+    networks:
+      - brain-battle-network
+
+volumes:
+  postgres_data:
+
+networks:
+  brain-battle-network:
+    driver: bridge
