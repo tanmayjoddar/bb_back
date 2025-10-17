@@ -1,9 +1,13 @@
-import { Request, Response, NextFunction } from 'express';
-import { prisma } from '../config/db.js';
-import jwt from 'jsonwebtoken';
+import { Request, Response, NextFunction } from "express";
+import { prisma } from "../config/db.js";
+import jwt from "jsonwebtoken";
 
 // Admin login
-export const adminLogin = async (req: Request, res: Response, next: NextFunction) => {
+export const adminLogin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { password } = req.body;
 
@@ -11,18 +15,18 @@ export const adminLogin = async (req: Request, res: Response, next: NextFunction
 
     if (!password || !adminPassword || password !== adminPassword) {
       res.status(401);
-      throw new Error('Invalid credentials');
+      throw new Error("Invalid credentials");
     }
 
     const token = jwt.sign(
-      { role: 'admin' },
-      process.env.JWT_SECRET || 'fallback_secret',
-      { expiresIn: '24h' }
+      { role: "admin" },
+      process.env.JWT_SECRET || "fallback_secret",
+      { expiresIn: "24h" }
     );
 
     res.status(200).json({
       success: true,
-      token
+      token,
     });
   } catch (err) {
     next(err);
@@ -30,23 +34,27 @@ export const adminLogin = async (req: Request, res: Response, next: NextFunction
 };
 
 // Get all participants (admin only)
-export const getAllParticipants = async (req: Request, res: Response, next: NextFunction) => {
+export const getAllParticipants = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const participants = await prisma.participant.findMany({
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: "desc" },
     });
 
     res.status(200).json({
       success: true,
-      participants: participants.map(p => ({
+      participants: participants.map((p) => ({
         id: p.id,
         name: p.name,
         email: p.email,
         phone: p.phone,
         college: p.college,
         code: p.code,
-        createdAt: p.createdAt
-      }))
+        createdAt: p.createdAt,
+      })),
     });
   } catch (err) {
     next(err);
@@ -54,20 +62,24 @@ export const getAllParticipants = async (req: Request, res: Response, next: Next
 };
 
 // Create round (admin only)
-export const createRound = async (req: Request, res: Response, next: NextFunction) => {
+export const createRound = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { name } = req.body;
 
     if (!name) {
       res.status(400);
-      throw new Error('Round name is required');
+      throw new Error("Round name is required");
     }
 
     const round = await prisma.round.create({
       data: {
         name,
-        status: 'pending'
-      }
+        status: "pending",
+      },
     });
 
     res.status(201).json({
@@ -76,8 +88,8 @@ export const createRound = async (req: Request, res: Response, next: NextFunctio
         id: round.id,
         name: round.name,
         status: round.status,
-        createdAt: round.createdAt
-      }
+        createdAt: round.createdAt,
+      },
     });
   } catch (err) {
     next(err);
@@ -85,42 +97,46 @@ export const createRound = async (req: Request, res: Response, next: NextFunctio
 };
 
 // Assign participant to round (admin only)
-export const assignParticipantToRound = async (req: Request, res: Response, next: NextFunction) => {
+export const assignParticipantToRound = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { roundId } = req.params;
     const { participantId } = req.body;
 
     if (!participantId) {
       res.status(400);
-      throw new Error('Participant ID is required');
+      throw new Error("Participant ID is required");
     }
 
     // Check if participant exists
     const participant = await prisma.participant.findUnique({
-      where: { id: participantId }
+      where: { id: participantId },
     });
 
     if (!participant) {
       res.status(404);
-      throw new Error('Participant not found');
+      throw new Error("Participant not found");
     }
 
     // Check if round exists
     const round = await prisma.round.findUnique({
-      where: { id: roundId }
+      where: { id: roundId },
     });
 
     if (!round) {
       res.status(404);
-      throw new Error('Round not found');
+      throw new Error("Round not found");
     }
 
     // Create participant-round mapping
     const participantRound = await prisma.participantRound.create({
       data: {
         participantId,
-        roundId
-      }
+        roundId,
+      },
     });
 
     res.status(201).json({
@@ -130,8 +146,8 @@ export const assignParticipantToRound = async (req: Request, res: Response, next
         participantId: participantRound.participantId,
         roundId: participantRound.roundId,
         status: participantRound.status,
-        createdAt: participantRound.createdAt
-      }
+        createdAt: participantRound.createdAt,
+      },
     });
   } catch (err) {
     next(err);

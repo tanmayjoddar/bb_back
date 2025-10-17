@@ -265,6 +265,7 @@ git push origin feature/your-feature-name
 Thank you for contributing to Brain Battle 3.0 Backend! Your contributions help make this project better for everyone.
 
 If you have any questions or need help, feel free to:
+
 - Open an issue
 - Contact the maintainers
 - Join our community discussions
