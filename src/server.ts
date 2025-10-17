@@ -1,6 +1,6 @@
-import app from './app.js';
-import dotenv from 'dotenv';
-import { prisma } from './config/db.js';
+import app from "./app.js";
+import dotenv from "dotenv";
+import { prisma } from "./config/db.js";
 
 dotenv.config();
 
@@ -12,7 +12,7 @@ app.listen(PORT, async () => {
     console.log(`✅ Database connected`);
     console.log(`🚀 Server running on http://localhost:${PORT}`);
   } catch (err) {
-    console.error('❌ Database connection failed:', err);
+    console.error("❌ Database connection failed:", err);
     process.exit(1);
   }
 });
