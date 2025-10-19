@@ -1,6 +1,6 @@
 # 🧪 Brain Battle 3.0 Backend - Postman Testing Guide
 
-**Base URL:** `http://localhost:4000/api`  
+**Base URL:** `http://localhost:4000/api`
 **Production URL:** `[Your Production Domain]/api`
 
 ---
@@ -24,6 +24,7 @@
 3. **Use token in Authorization header** for protected routes
 
 **Header Format:**
+
 ```
 Authorization: Bearer <token_from_login_response>
 ```
@@ -33,9 +34,11 @@ Authorization: Bearer <token_from_login_response>
 ## 📡 Registration Endpoints
 
 ### 1. Register Participant
+
 **POST** `/register`
 
 #### Request
+
 ```
 Method: POST
 URL: http://localhost:4000/api/register
@@ -52,6 +55,7 @@ Body (JSON):
 ```
 
 #### Response - Success (201)
+
 ```json
 {
   "success": true,
@@ -69,6 +73,7 @@ Body (JSON):
 ```
 
 #### Response - Error (400 - Missing Fields)
+
 ```json
 {
   "message": "Name and email are required",
@@ -77,6 +82,7 @@ Body (JSON):
 ```
 
 #### Response - Error (400 - Duplicate Email)
+
 ```json
 {
   "message": "Email already registered",
@@ -87,9 +93,11 @@ Body (JSON):
 ---
 
 ### 2. Get Participant by Code
+
 **GET** `/register/:code`
 
 #### Request
+
 ```
 Method: GET
 URL: http://localhost:4000/api/register/a1b2c3d4
@@ -98,6 +106,7 @@ Headers:
 ```
 
 #### Response - Success (200)
+
 ```json
 {
   "success": true,
@@ -114,6 +123,7 @@ Headers:
 ```
 
 #### Response - Error (404)
+
 ```json
 {
   "message": "Participant not found",
@@ -124,9 +134,11 @@ Headers:
 ---
 
 ### 3. Scan QR Code
+
 **POST** `/register/scan`
 
 #### Request Option A - With Code
+
 ```
 Method: POST
 URL: http://localhost:4000/api/register/scan
@@ -140,6 +152,7 @@ Body (JSON):
 ```
 
 #### Request Option B - With Full Payload
+
 ```
 Method: POST
 URL: http://localhost:4000/api/register/scan
@@ -153,6 +166,7 @@ Body (JSON):
 ```
 
 #### Response - Success (200)
+
 ```json
 {
   "success": true,
@@ -169,6 +183,7 @@ Body (JSON):
 ```
 
 #### Response - Error (400 - Missing Both Fields)
+
 ```json
 {
   "message": "Either code or payload is required",
@@ -177,6 +192,7 @@ Body (JSON):
 ```
 
 #### Response - Error (400 - Invalid Payload)
+
 ```json
 {
   "message": "Invalid payload format",
@@ -185,6 +201,7 @@ Body (JSON):
 ```
 
 #### Response - Error (404)
+
 ```json
 {
   "message": "Participant not found",
@@ -195,9 +212,11 @@ Body (JSON):
 ---
 
 ### 4. Get QR Code Image
+
 **GET** `/register/qr/:code`
 
 #### Request
+
 ```
 Method: GET
 URL: http://localhost:4000/api/register/qr/a1b2c3d4
@@ -205,11 +224,13 @@ Headers: (None required)
 ```
 
 #### Response - Success (200)
+
 - Returns PNG image file
 - Content-Type: `image/png`
 - Binary data (QR code image)
 
 #### Response - Error (404)
+
 ```json
 {
   "message": "Participant not found",
@@ -222,9 +243,11 @@ Headers: (None required)
 ## 👨‍💼 Admin Endpoints
 
 ### 1. Admin Login
+
 **POST** `/admin/login`
 
 #### Request
+
 ```
 Method: POST
 URL: http://localhost:4000/api/admin/login
@@ -238,6 +261,7 @@ Body (JSON):
 ```
 
 #### Response - Success (200)
+
 ```json
 {
   "success": true,
@@ -246,6 +270,7 @@ Body (JSON):
 ```
 
 #### Response - Error (401)
+
 ```json
 {
   "message": "Invalid credentials",
@@ -256,9 +281,11 @@ Body (JSON):
 ---
 
 ### 2. Get All Participants (Protected)
+
 **GET** `/admin/participants`
 
 #### Request
+
 ```
 Method: GET
 URL: http://localhost:4000/api/admin/participants
@@ -268,6 +295,7 @@ Headers:
 ```
 
 #### Response - Success (200)
+
 ```json
 {
   "success": true,
@@ -295,6 +323,7 @@ Headers:
 ```
 
 #### Response - Error (401 - Missing Token)
+
 ```json
 {
   "message": "Authentication required",
@@ -303,6 +332,7 @@ Headers:
 ```
 
 #### Response - Error (401 - Invalid Token)
+
 ```json
 {
   "message": "Invalid token",
@@ -313,9 +343,11 @@ Headers:
 ---
 
 ### 3. Create Round (Protected)
+
 **POST** `/admin/rounds`
 
 #### Request
+
 ```
 Method: POST
 URL: http://localhost:4000/api/admin/rounds
@@ -330,6 +362,7 @@ Body (JSON):
 ```
 
 #### Response - Success (201)
+
 ```json
 {
   "success": true,
@@ -343,6 +376,7 @@ Body (JSON):
 ```
 
 #### Response - Error (400 - Missing Name)
+
 ```json
 {
   "message": "Round name is required",
@@ -351,6 +385,7 @@ Body (JSON):
 ```
 
 #### Response - Error (401 - No Auth)
+
 ```json
 {
   "message": "Authentication required",
@@ -361,9 +396,11 @@ Body (JSON):
 ---
 
 ### 4. Assign Participant to Round (Protected)
+
 **POST** `/admin/rounds/:roundId/assign`
 
 #### Request
+
 ```
 Method: POST
 URL: http://localhost:4000/api/admin/rounds/3be5b050-3621-4acc-9190-2de52cde7ddc/assign
@@ -378,6 +415,7 @@ Body (JSON):
 ```
 
 #### Response - Success (201)
+
 ```json
 {
   "success": true,
@@ -392,6 +430,7 @@ Body (JSON):
 ```
 
 #### Response - Error (400 - Missing Participant ID)
+
 ```json
 {
   "message": "Participant ID is required",
@@ -400,6 +439,7 @@ Body (JSON):
 ```
 
 #### Response - Error (404 - Participant Not Found)
+
 ```json
 {
   "message": "Participant not found",
@@ -408,6 +448,7 @@ Body (JSON):
 ```
 
 #### Response - Error (404 - Round Not Found)
+
 ```json
 {
   "message": "Round not found",
@@ -416,6 +457,7 @@ Body (JSON):
 ```
 
 #### Response - Error (401 - No Auth)
+
 ```json
 {
   "message": "Authentication required",
@@ -429,16 +471,17 @@ Body (JSON):
 
 ### Common HTTP Status Codes
 
-| Code | Meaning | Example |
-|------|---------|---------|
-| 200 | OK - Request successful | GET /register/:code |
-| 201 | Created - Resource created | POST /register, /admin/rounds |
-| 400 | Bad Request - Invalid input | Missing required fields |
-| 401 | Unauthorized - Auth required | Missing or invalid token |
-| 404 | Not Found - Resource doesn't exist | Invalid code or ID |
-| 500 | Server Error - Internal issue | Database connection error |
+| Code | Meaning                            | Example                       |
+| ---- | ---------------------------------- | ----------------------------- |
+| 200  | OK - Request successful            | GET /register/:code           |
+| 201  | Created - Resource created         | POST /register, /admin/rounds |
+| 400  | Bad Request - Invalid input        | Missing required fields       |
+| 401  | Unauthorized - Auth required       | Missing or invalid token      |
+| 404  | Not Found - Resource doesn't exist | Invalid code or ID            |
+| 500  | Server Error - Internal issue      | Database connection error     |
 
 ### Error Response Format
+
 ```json
 {
   "message": "Error description",
@@ -469,8 +512,14 @@ Create a file named `BrainBattle-API.postman_collection.json`:
           "name": "Register Participant",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
-            "url": {"raw": "http://localhost:4000/api/register", "protocol": "http", "host": ["localhost"], "port": "4000", "path": ["api", "register"]},
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "http://localhost:4000/api/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api", "register"]
+            },
             "body": {
               "mode": "raw",
               "raw": "{\"name\":\"John Doe\",\"email\":\"john@example.com\",\"phone\":\"9876543210\",\"college\":\"XYZ College\"}"
@@ -481,23 +530,41 @@ Create a file named `BrainBattle-API.postman_collection.json`:
           "name": "Get Participant by Code",
           "request": {
             "method": "GET",
-            "url": {"raw": "http://localhost:4000/api/register/a1b2c3d4", "protocol": "http", "host": ["localhost"], "port": "4000", "path": ["api", "register", "a1b2c3d4"]}
+            "url": {
+              "raw": "http://localhost:4000/api/register/a1b2c3d4",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api", "register", "a1b2c3d4"]
+            }
           }
         },
         {
           "name": "Scan QR Code",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
-            "url": {"raw": "http://localhost:4000/api/register/scan", "protocol": "http", "host": ["localhost"], "port": "4000", "path": ["api", "register", "scan"]},
-            "body": {"mode": "raw", "raw": "{\"code\":\"a1b2c3d4\"}"}
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "http://localhost:4000/api/register/scan",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api", "register", "scan"]
+            },
+            "body": { "mode": "raw", "raw": "{\"code\":\"a1b2c3d4\"}" }
           }
         },
         {
           "name": "Get QR Code Image",
           "request": {
             "method": "GET",
-            "url": {"raw": "http://localhost:4000/api/register/qr/a1b2c3d4", "protocol": "http", "host": ["localhost"], "port": "4000", "path": ["api", "register", "qr", "a1b2c3d4"]}
+            "url": {
+              "raw": "http://localhost:4000/api/register/qr/a1b2c3d4",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api", "register", "qr", "a1b2c3d4"]
+            }
           }
         }
       ]
@@ -509,35 +576,73 @@ Create a file named `BrainBattle-API.postman_collection.json`:
           "name": "Admin Login",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
-            "url": {"raw": "http://localhost:4000/api/admin/login", "protocol": "http", "host": ["localhost"], "port": "4000", "path": ["api", "admin", "login"]},
-            "body": {"mode": "raw", "raw": "{\"password\":\"brainbattle2025\"}"}
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "http://localhost:4000/api/admin/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api", "admin", "login"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"password\":\"brainbattle2025\"}"
+            }
           }
         },
         {
           "name": "Get All Participants",
           "request": {
             "method": "GET",
-            "header": [{"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}],
-            "url": {"raw": "http://localhost:4000/api/admin/participants", "protocol": "http", "host": ["localhost"], "port": "4000", "path": ["api", "admin", "participants"]}
+            "header": [
+              { "key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE" }
+            ],
+            "url": {
+              "raw": "http://localhost:4000/api/admin/participants",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api", "admin", "participants"]
+            }
           }
         },
         {
           "name": "Create Round",
           "request": {
             "method": "POST",
-            "header": [{"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}, {"key": "Content-Type", "value": "application/json"}],
-            "url": {"raw": "http://localhost:4000/api/admin/rounds", "protocol": "http", "host": ["localhost"], "port": "4000", "path": ["api", "admin", "rounds"]},
-            "body": {"mode": "raw", "raw": "{\"name\":\"Semifinals\"}"}
+            "header": [
+              { "key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "http://localhost:4000/api/admin/rounds",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api", "admin", "rounds"]
+            },
+            "body": { "mode": "raw", "raw": "{\"name\":\"Semifinals\"}" }
           }
         },
         {
           "name": "Assign Participant to Round",
           "request": {
             "method": "POST",
-            "header": [{"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}, {"key": "Content-Type", "value": "application/json"}],
-            "url": {"raw": "http://localhost:4000/api/admin/rounds/ROUND_ID/assign", "protocol": "http", "host": ["localhost"], "port": "4000", "path": ["api", "admin", "rounds", "ROUND_ID", "assign"]},
-            "body": {"mode": "raw", "raw": "{\"participantId\":\"PARTICIPANT_ID\"}"}
+            "header": [
+              { "key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "http://localhost:4000/api/admin/rounds/ROUND_ID/assign",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["api", "admin", "rounds", "ROUND_ID", "assign"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"participantId\":\"PARTICIPANT_ID\"}"
+            }
           }
         }
       ]
@@ -561,16 +666,21 @@ Create Postman Environment `BrainBattle-Dev`:
 {
   "name": "BrainBattle-Dev",
   "values": [
-    {"key": "base_url", "value": "http://localhost:4000/api", "enabled": true},
-    {"key": "admin_token", "value": "", "enabled": true},
-    {"key": "participant_code", "value": "", "enabled": true},
-    {"key": "round_id", "value": "", "enabled": true},
-    {"key": "participant_id", "value": "", "enabled": true}
+    {
+      "key": "base_url",
+      "value": "http://localhost:4000/api",
+      "enabled": true
+    },
+    { "key": "admin_token", "value": "", "enabled": true },
+    { "key": "participant_code", "value": "", "enabled": true },
+    { "key": "round_id", "value": "", "enabled": true },
+    { "key": "participant_id", "value": "", "enabled": true }
   ]
 }
 ```
 
 **Usage in requests:**
+
 ```
 URL: {{base_url}}/register
 Header: Authorization: Bearer {{admin_token}}
@@ -581,6 +691,7 @@ Header: Authorization: Bearer {{admin_token}}
 ## 🔄 Testing Workflow
 
 ### 1. **Public Registration Flow**
+
 ```
 POST /register
   ↓
@@ -592,6 +703,7 @@ GET /register/qr/:code (get image)
 ```
 
 ### 2. **Admin Management Flow**
+
 ```
 POST /admin/login (save token)
   ↓
@@ -607,6 +719,7 @@ POST /admin/rounds/:roundId/assign (use token with IDs)
 ## 📝 Quick Copy-Paste Templates
 
 ### Register Participant
+
 ```bash
 curl -X POST http://localhost:4000/api/register \
   -H "Content-Type: application/json" \
@@ -614,6 +727,7 @@ curl -X POST http://localhost:4000/api/register \
 ```
 
 ### Admin Login
+
 ```bash
 curl -X POST http://localhost:4000/api/admin/login \
   -H "Content-Type: application/json" \
@@ -621,12 +735,14 @@ curl -X POST http://localhost:4000/api/admin/login \
 ```
 
 ### Get Participants (requires token)
+
 ```bash
 curl -X GET http://localhost:4000/api/admin/participants \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
 ### Scan QR Code
+
 ```bash
 curl -X POST http://localhost:4000/api/register/scan \
   -H "Content-Type: application/json" \
@@ -650,6 +766,6 @@ curl -X POST http://localhost:4000/api/register/scan \
 
 ---
 
-**Last Updated:** October 19, 2025  
-**API Version:** 1.0.0  
+**Last Updated:** October 19, 2025
+**API Version:** 1.0.0
 **Backend Status:** ✅ Production Ready
